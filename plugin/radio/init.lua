@@ -22,7 +22,7 @@ local sftpDetails = {
 }
 
 function request(query, creds, cb)
-    local host = "http://node1.gart.sh:3300"
+    local host = "https://srradio.gart.sh"
     local path = "/request"
     
     http.post(host, path, {}, json.encode({
