@@ -19,12 +19,31 @@ if (!body.creds || !body.query) {
     return;
 }
 
-    const info = await Youtube.query(body.query);
+    const info = await Youtube.query(body.query).catch((err) => {
+        res.status(500).json({
+            error: err.message,
+        });
+        return;
+    });
+
+    if (!info) {
+        return;
+    }
+
     const video = info.videos[0];
-    
-    await Youtube.createAudioFile(video.videoId, body.creds)
-    
+
     res.json(video);
+    
+    await Youtube.createAudioFile(video.videoId, body.creds, video)
+    
+});
+
+app.get('/status/:id', async (req, res) => {
+    const id = req.params.id;
+
+    const status = await Youtube.getStatus(id);
+
+    res.json(status);
 });
 
 app.listen(3300, () => {
